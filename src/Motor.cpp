@@ -10,9 +10,12 @@ void Motor::begin() {
     pinMode(m_in1, OUTPUT);
     pinMode(m_in2, OUTPUT);
 
-    ledcSetup(m_channel, 1000, 8);
-
-    ledcAttachPin(m_pwm, m_channel);
+    #if ESP_ARDUINO_VERSION_MAJOR >= 3
+        ledcAttach(m_pwm, 1000, 8);
+    #else
+        ledcSetup(m_channel, 1000, 8);
+        ledcAttachPin(m_pwm, m_channel);
+    #endif
 }
 
 void Motor::setSpeed(int speed) {
@@ -31,4 +34,10 @@ void Motor::setSpeed(int speed) {
     } else { 
         ledcWrite(m_channel, 0); 
     }
+
+    #if ESP_ARDUINO_VERSION_MAJOR >= 3
+        ledcWrite(m_pwm, speed);
+    #else
+        ledcWrite(m_channel, speed);
+    #endif
 }
