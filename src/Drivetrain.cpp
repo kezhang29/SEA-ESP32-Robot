@@ -8,13 +8,13 @@ Drivetrain::Drivetrain(Motor& leftFront, Motor& leftBack, Motor& rightFront, Mot
     m_stby1(stby1),
     m_stby2(stby2) {}
 
-void Drivetrain::begin() {
+void Drivetrain::configure() {
 
-    m_leftFront.begin();
-    m_leftBack.begin();
+    m_leftFront.configure();
+    m_leftBack.configure();
 
-    m_rightFront.begin();
-    m_rightBack.begin();
+    m_rightFront.configure();
+    m_rightBack.configure();
 
     pinMode(m_stby1, OUTPUT);
     pinMode(m_stby2, OUTPUT);

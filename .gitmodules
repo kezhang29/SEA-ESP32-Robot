@@ -1,3 +1,0 @@
-[submodule "lib/WiFiController"]
-	path = lib/WiFiController
-	url = git@github.com:kezhang29/WiFiController.git

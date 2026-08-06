@@ -11,7 +11,7 @@ public:
         int channel
     );
 
-    void begin();
+    void configure();
 
     void setSpeed(int speed);
 

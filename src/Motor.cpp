@@ -6,7 +6,7 @@ Motor::Motor(int in1, int in2, int pwm, int channel):
     m_pwm(pwm),
     m_channel(channel) {}
 
-void Motor::begin() {
+void Motor::configure() {
     pinMode(m_in1, OUTPUT);
     pinMode(m_in2, OUTPUT);
 

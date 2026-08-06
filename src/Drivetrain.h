@@ -15,7 +15,7 @@ public:
         int stby2
     );
 
-    void begin();
+    void configure();
 
     void arcadeDrive(
         int leftSpeed,
