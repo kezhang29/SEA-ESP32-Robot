@@ -84,12 +84,10 @@ const char WIFICONTROLLER_HTML[] PROGMEM = R"rawliteral(
     height: 9px;
     border-radius: 50%;
     background: var(--accent);
-    box-shadow: 0 0 8px var(--accent);
   }
 
   .dot.offline {
     background: var(--danger);
-    box-shadow: 0 0 8px var(--danger);
   }
 
   .panel {
