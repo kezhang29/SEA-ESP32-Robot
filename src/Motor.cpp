@@ -1,14 +1,18 @@
 #include "Motor.h"
 
-Motor::Motor(int in1, int in2, int pwm, int channel):
+Motor::Motor(int in1, int in2, int pwm, int channel, int stby):
     m_in1(in1),
     m_in2(in2),
     m_pwm(pwm),
-    m_channel(channel) {}
+    m_channel(channel),
+    m_stby(stby){}
 
 void Motor::configure() {
     pinMode(m_in1, OUTPUT);
     pinMode(m_in2, OUTPUT);
+    pinMode(m_stby, OUTPUT);
+
+    digitalWrite(m_stby, HIGH);
 
     #if ESP_ARDUINO_VERSION_MAJOR >= 3
         ledcAttach(m_pwm, 1000, 8);

@@ -8,7 +8,8 @@ public:
         int in1,
         int in2,
         int pwm,
-        int channel
+        int channel,
+        int stby
     );
 
     void configure();
@@ -20,4 +21,5 @@ private:
     int m_in2;
     int m_pwm;
     int m_channel;
+    int m_stby;
 };

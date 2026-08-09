@@ -10,9 +10,7 @@ public:
         Motor& leftFront,
         Motor& leftBack,
         Motor& rightFront,
-        Motor& rightBack,
-        int stby1,
-        int stby2
+        Motor& rightBack
     );
 
     void configure();
@@ -38,7 +36,4 @@ private:
 
     Motor& m_rightFront;
     Motor& m_rightBack;
-
-    int m_stby1;
-    int m_stby2;
 };

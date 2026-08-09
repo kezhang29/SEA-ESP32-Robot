@@ -1,26 +1,17 @@
 #include "Drivetrain.h"
 
-Drivetrain::Drivetrain(Motor& leftFront, Motor& leftBack, Motor& rightFront, Motor& rightBack, int stby1, int stby2):
+Drivetrain::Drivetrain(Motor& leftFront, Motor& leftBack, Motor& rightFront, Motor& rightBack):
     m_leftFront(leftFront),
     m_leftBack(leftBack),
     m_rightFront(rightFront),
-    m_rightBack(rightBack),
-    m_stby1(stby1),
-    m_stby2(stby2) {}
+    m_rightBack(rightBack) {}
 
 void Drivetrain::configure() {
-
     m_leftFront.configure();
     m_leftBack.configure();
 
     m_rightFront.configure();
     m_rightBack.configure();
-
-    pinMode(m_stby1, OUTPUT);
-    pinMode(m_stby2, OUTPUT);
-
-    digitalWrite(m_stby1, HIGH);
-    digitalWrite(m_stby2, HIGH);
 }
 
 void Drivetrain::arcadeDrive(int leftSpeed, int rightSpeed) {
