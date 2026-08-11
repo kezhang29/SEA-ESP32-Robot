@@ -10,7 +10,8 @@
 2. [WiFiController](#wificontroller)
 3. [Motor](#motor)
 4. [Drivetrain](#drivetrain)
-5. [Quick Reference](#quick-reference)
+5. [Controlling Motors with WiFiController](#controlling-motors-with-wificontroller)
+6. [Quick Reference](#quick-reference)
 
 ---
 
@@ -422,6 +423,161 @@ robot.arcadeDrive(-200, 200);  // Left reverse, right forward = sharp left spin
 |---|---|---|
 | `leftSpeed` | `int` | Speed for left wheels: -255 (reverse) to 255 (forward) |
 | `rightSpeed` | `int` | Speed for right wheels: -255 (reverse) to 255 (forward) |
+
+---
+
+## Controlling Motors with WiFiController
+
+These examples show how to combine the web controller with motors and the drivetrain to build a Wi-Fi-controlled robot.
+
+### Basic Wi-Fi Driving
+
+Use W/A/S/D to drive a 4-wheel robot, SPACE to stop:
+
+```cpp
+#include "ESP32Robot.h"
+
+WiFiController wifi;
+
+Motor leftFront(12, 13, 14, 0, 15);
+Motor leftBack(16, 17, 18, 1, 19);
+Motor rightFront(20, 21, 22, 2, 23);
+Motor rightBack(2, 3, 4, 3, 5);
+
+Drivetrain robot(leftFront, leftBack, rightFront, rightBack);
+
+const int SPEED = 150;
+
+void setup() {
+    Serial.begin(115200);
+    robot.configure();
+    wifi.begin("MyWiFi", "password");
+}
+
+void loop() {
+    wifi.update();
+
+    if (wifi.buttonSpacePressed()) {
+        robot.stop();
+      }
+    else if (wifi.buttonWPressed()) {
+        robot.forward(SPEED);
+      }
+    else if (wifi.buttonSPressed()) {
+        robot.backward(SPEED);
+      }
+    else if (wifi.buttonAPressed()) {
+        robot.left(SPEED);
+      }
+    else if (wifi.buttonDPressed()) {
+        robot.right(SPEED);
+      }
+    else {
+        robot.stop();     // No button pressed — stop
+      }
+}
+```
+
+### Driving with Telemetry
+
+Show the current movement direction on the web page:
+
+```cpp
+void loop() {
+    wifi.update();
+
+    if (wifi.buttonWPressed()) {
+        robot.forward(SPEED);
+        wifi.setText("Action", "Forward");
+      }
+    else if (wifi.buttonSPressed()) {
+        robot.backward(SPEED);
+        wifi.setText("Action", "Backward");
+      }
+    else if (wifi.buttonAPressed()) {
+        robot.left(SPEED);
+        wifi.setText("Action", "Turn Left");
+      }
+    else if (wifi.buttonDPressed()) {
+        robot.right(SPEED);
+        wifi.setText("Action", "Turn Right");
+      }
+    else {
+        robot.stop();
+        wifi.setText("Action", "Idle");
+      }
+}
+```
+
+### Variable Speed with Extra Buttons
+
+Use W to drive forward at normal speed, and hold button 1 while W to drive at slow speed:
+
+```cpp
+void loop() {
+    wifi.update();
+
+    if (wifi.buttonWPressed()) {
+        if (wifi.button1Pressed()) {
+            robot.forward(80);       // Slow
+            wifi.setText("Speed", "Slow");
+          } else {
+            robot.forward(180);      // Normal
+            wifi.setText("Speed", "Normal");
+          }
+      }
+    else {
+        robot.stop();
+      }
+}
+```
+
+### Toggle an Action with a Single Press
+
+Use `JustPressed` to toggle something on and off (like headlights or a buzzer):
+
+```cpp
+bool lightsOn = false;
+
+void loop() {
+    wifi.update();
+
+    if (wifi.buttonBJustPressed()) {
+        lightsOn = !lightsOn;
+        digitalWrite(LED_BUILTIN, lightsOn ? HIGH : LOW);
+        wifi.setText("Lights", lightsOn ? "ON" : "OFF");
+      }
+
+    if (wifi.buttonWPressed()) {
+        robot.forward(150);
+      }
+    else {
+        robot.stop();
+      }
+}
+```
+
+### Emergency Stop
+
+Make SPACE the highest priority so it stops the robot no matter what:
+
+```cpp
+void loop() {
+    wifi.update();
+
+     // Emergency stop — check first, always
+    if (wifi.buttonSpacePressed()) {
+        robot.stop();
+        return;     // Skip everything else in loop()
+      }
+
+     // Normal driving code below...
+    if (wifi.buttonWPressed()) {
+        robot.forward(150);
+      }
+     // ...
+}
+```
 
 ---
 
